@@ -39,7 +39,7 @@ return [
                 'baseUrl' => '@web/themes/23F',
                 'pathMap' => [
                     '@app/views' => '@app/themes/23F',
-                ]
+                ],
             ]
         ],
         'errorHandler' => [
