@@ -5,10 +5,11 @@ use Yii;
 use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
+use yii\helpers\ArrayHelper;
 use yii\web\IdentityInterface;
 
 /**
- * User model
+ * User model. Надо бы перенести в папку tables! или разделить модели
  *
  * @property integer $id
  * @property string $username
@@ -41,7 +42,7 @@ class User extends ActiveRecord implements IdentityInterface
     public function behaviors()
     {
         return [
-            TimestampBehavior::className(),
+            TimestampBehavior::class,
         ];
     }
 
@@ -185,5 +186,21 @@ class User extends ActiveRecord implements IdentityInterface
     public function removePasswordResetToken()
     {
         $this->password_reset_token = null;
+    }
+
+
+    public static function getUsersList()
+    {
+        $users = static::find()// выбираем юзеров из таблицы юзерс
+        ->select(['id', 'username'])// выбираем только айди и имя
+        ->asArray()// получаем в виде массива
+        ->all();
+
+        // в качестве индексов массива юзерс проставляем айдишники, а в качестве значений юзернейм.
+        return ArrayHelper::map($users, 'id', 'username');
+
+//        // можно и так:
+//        return static::find()->select(['username', 'id'])->indexBy('id')->column();
+
     }
 }

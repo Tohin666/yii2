@@ -1,0 +1,14 @@
+suite_namespace: frontend\tests\acceptance
+actor: AcceptanceTester
+modules:
+    enabled:
+        - WebDriver:
+#            url: http://localhost:8080
+            url: http://front.yii2
+#            browser: firefox
+            browser: chrome
+            port: 9515
+#        - PhpBrowser:
+#            url: http://front.yii2
+        - Yii2:
+            part: init
