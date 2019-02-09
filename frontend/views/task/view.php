@@ -9,11 +9,14 @@
 
 /* @var $this \yii\web\View */
 
+/** @var $history \common\models\tables\TaskChat */
+
 use yii\widgets\ActiveForm;
 use yii\helpers\Url;
 use yii\helpers\Html;
 
 \frontend\assets\TaskViewAsset::register($this);
+\frontend\assets\TaskChatViewAsset::register($this);
 ?>
 
 <div class="task-container col-md-9">
@@ -108,6 +111,29 @@ use yii\helpers\Html;
         //                ['add-comment', 'id' => $model->id], ['class' => 'btn btn-success'])
         ?>
         <!--        </p>-->
+
+
+        <?php if ($model->id) : ?>
+
+        <h3>Chat</h3><br>
+
+        <form action="#" name="chat_form" id="task_chat_form" data-userid="<?= Yii::$app->user->id ?? "null" ?>"
+              data-taskid="<?= $model->id ?>">
+            <label>
+                введите сообщение
+                <input type="text" name="message"/>
+                <input type="submit"/>
+            </label>
+        </form>
+        <hr>
+        <div id="root_task_chat">
+            <?php foreach ($history as $message) : ?>
+                <?php $username = $message->user->username ?? 'Аноним' ?>
+                <div><?= "<b>" . $username . ":</b> " . $message->message ?></div>
+            <?php endforeach; ?>
+        </div>
+
+        <?php endif; ?>
 
     </div>
 

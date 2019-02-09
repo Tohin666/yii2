@@ -1,6 +1,7 @@
 <?php
 namespace frontend\controllers;
 
+use common\models\tables\Chat;
 use Yii;
 use yii\base\InvalidArgumentException;
 use yii\web\BadRequestHttpException;
@@ -212,5 +213,14 @@ class SiteController extends Controller
         return $this->render('resetPassword', [
             'model' => $model,
         ]);
+    }
+
+
+    public function actionChat()
+    {
+        $history = Chat::find()->all();
+//        $history = Chat::find()->orderBy('id DESC')->limit(50)->all();
+        return $this->render('chat', ['history' => $history]);
+
     }
 }

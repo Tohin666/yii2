@@ -3,6 +3,7 @@
 namespace frontend\controllers;
 
 use common\models\tables\Comments;
+use common\models\tables\TaskChat;
 use common\models\tables\Tasks;
 use common\models\tables\TaskStatuses;
 use common\models\User;
@@ -49,9 +50,11 @@ class TaskController extends Controller
         // Если открываем таск
         if ($id) {
             $model = Tasks::findOne($id);
+            $history = TaskChat::find()->where(['task_id' => $id])->all();
             //Если создаем таск
         } else {
             $model = new Tasks();
+            $history = null;
         }
 
         // в любом случае открываем таск, только в первом случае он будет заполнен, а во втором пустой.
@@ -62,6 +65,7 @@ class TaskController extends Controller
             'userId' => \Yii::$app->user->id,
             'taskCommentForm' => new Comments(),
             'taskAttachmentsForm' => new TaskAttachmentsAddForm(),
+            'history' => $history,
         ]);
 
     }
@@ -166,5 +170,7 @@ class TaskController extends Controller
         }
         $this->redirect(\Yii::$app->request->referrer);
     }
+
+
 
 }

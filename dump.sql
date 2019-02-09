@@ -16,6 +16,33 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Table structure for table `chat`
+--
+
+DROP TABLE IF EXISTS `chat`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `chat` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) DEFAULT NULL,
+  `message` text COLLATE utf8_unicode_ci,
+  PRIMARY KEY (`id`),
+  KEY `fk_chat_user` (`user_id`),
+  CONSTRAINT `fk_chat_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `chat`
+--
+
+LOCK TABLES `chat` WRITE;
+/*!40000 ALTER TABLE `chat` DISABLE KEYS */;
+INSERT INTO `chat` VALUES (1,NULL,'asdf'),(2,NULL,'[object Object]'),(3,NULL,'sdfgsdfgsdfg'),(4,1,'hhhhhhhhhh'),(5,NULL,'lllllllllllll'),(6,NULL,'ssssssssssss'),(7,3,'ddddddddddd'),(8,3,'xxxxxxxxx'),(9,3,'cccccccccccc'),(10,3,'bbbbbbbbb'),(11,3,'nnnnnnnnnnn'),(12,3,'mmmmmmmm'),(13,3,'rrrrrrrrrrrrrtt'),(14,3,'yyyyuuuuuuuuu');
+/*!40000 ALTER TABLE `chat` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `comments`
 --
 
@@ -67,7 +94,7 @@ CREATE TABLE `migration` (
 
 LOCK TABLES `migration` WRITE;
 /*!40000 ALTER TABLE `migration` DISABLE KEYS */;
-INSERT INTO `migration` VALUES ('m000000_000000_base',1549124065),('m130524_201442_init',1549124084),('m190205_052429_create_tasks_table',1549348770),('m190205_054956_create_task_statuses_table',1549348771),('m190205_064518_create_comments_table',1549349699),('m190205_065623_create_task_attachments_table',1549349926);
+INSERT INTO `migration` VALUES ('m000000_000000_base',1549124065),('m130524_201442_init',1549124084),('m190205_052429_create_tasks_table',1549348770),('m190205_054956_create_task_statuses_table',1549348771),('m190205_064518_create_comments_table',1549349699),('m190205_065623_create_task_attachments_table',1549349926),('m190209_103740_create_chat_table',1549709059),('m190209_155811_create_task_chat_table',1549728522);
 /*!40000 ALTER TABLE `migration` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -95,6 +122,36 @@ CREATE TABLE `task_attachments` (
 LOCK TABLES `task_attachments` WRITE;
 /*!40000 ALTER TABLE `task_attachments` DISABLE KEYS */;
 /*!40000 ALTER TABLE `task_attachments` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `task_chat`
+--
+
+DROP TABLE IF EXISTS `task_chat`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `task_chat` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `task_id` int(11) NOT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  `message` text COLLATE utf8_unicode_ci,
+  PRIMARY KEY (`id`),
+  KEY `fk_task_chat_tasks` (`task_id`),
+  KEY `fk_task_chat_user` (`user_id`),
+  CONSTRAINT `fk_task_chat_tasks` FOREIGN KEY (`task_id`) REFERENCES `tasks` (`id`),
+  CONSTRAINT `fk_task_chat_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `task_chat`
+--
+
+LOCK TABLES `task_chat` WRITE;
+/*!40000 ALTER TABLE `task_chat` DISABLE KEYS */;
+INSERT INTO `task_chat` VALUES (1,1,3,'1234'),(2,1,NULL,'4321');
+/*!40000 ALTER TABLE `task_chat` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -198,4 +255,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-02-07 15:56:07
+-- Dump completed on 2019-02-09 20:34:21
