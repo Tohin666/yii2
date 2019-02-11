@@ -40,7 +40,7 @@ use yii\helpers\Html;
         <h4><?= $form->field($model, 'responsible_id')->dropDownList($usersList) ?></h4><br>
         <h4><?= $form->field($model, 'status')->dropDownList($statusesList) ?></h4><br>
         <?= Html::submitButton("Save", ['class' => 'btn btn-success']) ?>
-<!--        --><?//= Html::submitButton(Yii::t("main", "Save"), ['class' => 'btn btn-success']) ?>
+        <!--        --><? //= Html::submitButton(Yii::t("main", "Save"), ['class' => 'btn btn-success']) ?>
         <?php ActiveForm::end() ?>
         <hr>
 
@@ -80,10 +80,11 @@ use yii\helpers\Html;
             ->label(false) ?>
             <?= $form->field($taskCommentForm, 'comment')->textarea()
             ->label("Add Comment") ?>
-<!--            ->label(Yii::t('main', "TaskAddComment")) ?>-->
+            <!--            ->label(Yii::t('main', "TaskAddComment")) ?>-->
             <?= $form->field($taskCommentForm, 'photo')->fileInput(); ?>
             <?= Html::submitButton("Add Comment", ['class' => 'btn btn-default']) ?>
-<!--            --><?//= Html::submitButton(Yii::t("main", "TaskAddComment"), ['class' => 'btn btn-default']) ?>
+            <!--            --><?//= Html::submitButton(Yii::t("main", "TaskAddComment"), ['class' => 'btn btn-default'])
+            ?>
             <?php
             ActiveForm::end();
         endif;
@@ -91,7 +92,7 @@ use yii\helpers\Html;
         <hr>
 
         <h3>Comments</h3><br>
-<!--        <h3>--><?//= Yii::t("main", "TaskComments") ?><!--</h3><br>-->
+        <!--        <h3>--><? //= Yii::t("main", "TaskComments") ?><!--</h3><br>-->
         <?php foreach ($model->comments as $comment): ?>
             <p>
                 <strong><?= $comment->user->username ?></strong> <i><?= $comment->created_at ?></i><br>
@@ -115,28 +116,33 @@ use yii\helpers\Html;
 
         <?php if ($model->id) : ?>
 
-        <h3>Chat</h3><br>
+            <h3>Chat</h3><br>
 
-        <form action="#" name="chat_form" id="task_chat_form" data-userid="<?= Yii::$app->user->id ?? "null" ?>"
-              data-taskid="<?= $model->id ?>">
-            <label>
-                введите сообщение
-                <input type="text" name="message"/>
-                <input type="submit"/>
-            </label>
-        </form>
-        <hr>
-        <div id="root_task_chat">
-            <?php foreach ($history as $message) : ?>
-                <?php $username = $message->user->username ?? 'Аноним' ?>
-                <div><?= "<b>" . $username . ":</b> " . $message->message ?></div>
-            <?php endforeach; ?>
-        </div>
+            <!--        <form action="#" name="chat_form" id="task_chat_form" data-userid="--><? //= Yii::$app->user->id ?? "null" ?><!--"-->
+            <!--              data-taskid="--><? //= $model->id ?><!--">-->
+            <form action="#" name="chat_form" id="task_chat_form">
+                <label>
+                    <input type="hidden" name="taskid" value="<?= $model->id ?>"/>
+                    <input type="hidden" name="userid" value="<?= $userId ?>"/>
+                    введите сообщение
+                    <input type="text" name="message"/>
+                    <input type="submit"/>
+                </label>
+            </form>
+            <hr>
+            <div id="root_task_chat">
+                <?php foreach ($history as $message) : ?>
+                    <?php $username = $message->user->username ?? 'Аноним' ?>
+                    <div><?= "<b>" . $username . ":</b> " . $message->message ?></div>
+                <?php endforeach; ?>
+            </div>
 
         <?php endif; ?>
 
     </div>
-
 </div>
-
+<script>
+    // передаем параметр в скрипт taskChat.js, чтобы привязать чат к каналу (таску)
+    var task = <?= $model->id ?>;
+</script>
 

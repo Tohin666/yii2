@@ -50,6 +50,7 @@ class TaskController extends Controller
         // Если открываем таск
         if ($id) {
             $model = Tasks::findOne($id);
+            // подгружаем историю чата
             $history = TaskChat::find()->where(['task_id' => $id])->all();
             //Если создаем таск
         } else {
@@ -170,7 +171,6 @@ class TaskController extends Controller
         }
         $this->redirect(\Yii::$app->request->referrer);
     }
-
 
 
 }
