@@ -47,7 +47,8 @@ class TaskAttachmentsAddForm extends Model
         return false;
     }
 
-    protected function saveUploadedFile() {
+    protected function saveUploadedFile()
+    {
         // формируем имя файла
         $this->filename = \Yii::$app->getSecurity()->generateRandomString(12)
             . "." . $this->file->getExtension();

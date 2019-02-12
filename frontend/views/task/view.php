@@ -21,35 +21,70 @@ use yii\helpers\Html;
 
 <div class="task-container col-md-9">
     <div class="bg-info task-preview taskView">
-        <button id="alert-button">Alert</button>
+
         <?php
-        // прописываем экшн сейв, чтобы при сохранении перенаправлялось на него
-        $form = ActiveForm::begin(['action' => Url::to(['task/save', 'id' => $model->id])])
-        ?>
-        <h2><?= $form->field($model, 'title') ?></h2><br>
-        <p><?= $form->field($model, 'description')->textarea() ?></p><br>
-        <h3><?= $form->field($model, 'date')
-//                ->textInput(['type' => 'date'])
-                ->widget(\yii\jui\DatePicker::class, [
-                    'language' => 'ru',
-                    'clientOptions' => [
-                        'dateFormat' => 'yy-mm-dd',
-                    ],
-                ])
-            ?></h3>
-        <h4><?= $form->field($model, 'responsible_id')->dropDownList($usersList) ?></h4><br>
-        <h4><?= $form->field($model, 'status')->dropDownList($statusesList) ?></h4><br>
-        <?= Html::submitButton("Save", ['class' => 'btn btn-success']) ?>
-        <!--        --><? //= Html::submitButton(Yii::t("main", "Save"), ['class' => 'btn btn-success']) ?>
-        <?php ActiveForm::end() ?>
+        // Юзеры могут только просматривать задачи.
+        if (\Yii::$app->user->can('user')) :
+            ?>
+            <h2>Задача:<br><?= $model->title ?></h2>
+            <p>Описание: <?= $model->description ?></p>
+            <h3>Дата: <?= $model->date ?></h3>
+            <h4>Ответственный: <?= $model->users->username ?></h4>
+            <h4>Статус: <?= $model->statusName->name ?></h4>
+
+        <?php else: ?>
+            <?php
+            \yii\widgets\Pjax::begin();
+            // прописываем экшн сейв, чтобы при сохранении перенаправлялось на него
+            $form = ActiveForm::begin([
+                'action' => Url::to(['task/save', 'id' => $model->id]),
+                'options' => [
+                    'data' => ['pjax' => true]
+                ],
+            ])
+            ?>
+            <h2><?= $form->field($model, 'title') ?></h2><br>
+            <p><?= $form->field($model, 'description')->textarea() ?></p><br>
+            <h3><?= $form->field($model, 'date')
+////                ->textInput(['type' => 'date'])
+//                ->widget(\yii\jui\DatePicker::class, [
+//                    'language' => 'ru',
+//                    'dateFormat' => 'yy-mm-dd',
+//                    'clientOptions' => [
+//                        'dateFormat' => 'yy-mm-dd',
+//                    ],
+//                ])
+                    ->widget(\kartik\datetime\DateTimePicker::class, [
+                        'pluginOptions' => [
+//                        'format' => 'd-M-Y g:i A',
+                        ]
+                    ])
+                ?></h3>
+            <h4><?= $form->field($model, 'responsible_id')->dropDownList($usersList) ?></h4><br>
+            <h4><?= $form->field($model, 'status')->dropDownList($statusesList) ?></h4><br>
+            <?= Html::submitButton("Save", ['class' => 'btn btn-success']) ?>
+            <!--        --><? //= Html::submitButton(Yii::t("main", "Save"), ['class' => 'btn btn-success']) ?>
+            <?php
+            ActiveForm::end();
+            \yii\widgets\Pjax::end();
+            ?>
+
+        <?php endif; ?>
+
         <hr>
 
 
         <h3>Вложения</h3>
         <?php
+        \yii\widgets\Pjax::begin();
         // Пользователь юзер не может добавлять влжения
         if (!\Yii::$app->user->can('user')) :
-            $form = ActiveForm::begin(['action' => Url::to(['add-attachment'])])
+            $form = ActiveForm::begin([
+                'action' => Url::to(['add-attachment']),
+                'options' => [
+                    'data' => ['pjax' => true]
+                ],
+            ])
             ?>
             <?= $form->field($taskAttachmentsForm, 'taskId')->hiddenInput(['value' => $model->id])
             ->label(false) ?>
@@ -66,14 +101,23 @@ use yii\helpers\Html;
                     "@web/img/tasks/small/" . $file->path, true)),
                 Url::to("@web/img/tasks/" . $file->path, true)
             ) ?>
-        <?php endforeach; ?>
+        <?php
+        endforeach;
+        \yii\widgets\Pjax::end();
+        ?>
         <hr>
 
 
         <?php
+        \yii\widgets\Pjax::begin();
         // Пользователь юзер не может добавлять коментарии
         if (!\Yii::$app->user->can('user')) :
-            $form = ActiveForm::begin(['action' => Url::to(['add-comment'])])
+            $form = ActiveForm::begin([
+                'action' => Url::to(['add-comment']),
+                'options' => [
+                    'data' => ['pjax' => true]
+                ],
+            ])
             ?>
             <?= $form->field($taskCommentForm, 'user_id')->hiddenInput(['value' => $userId])->label(false) ?>
             <?= $form->field($taskCommentForm, 'task_id')->hiddenInput(['value' => $model->id])
@@ -81,7 +125,8 @@ use yii\helpers\Html;
             <?= $form->field($taskCommentForm, 'comment')->textarea()
             ->label("Add Comment") ?>
             <!--            ->label(Yii::t('main', "TaskAddComment")) ?>-->
-            <?= $form->field($taskCommentForm, 'photo')->fileInput(); ?>
+            <!--            --><?//= $form->field($taskCommentForm, 'photo')->fileInput();
+            ?>
             <?= Html::submitButton("Add Comment", ['class' => 'btn btn-default']) ?>
             <!--            --><?//= Html::submitButton(Yii::t("main", "TaskAddComment"), ['class' => 'btn btn-default'])
             ?>
@@ -105,7 +150,10 @@ use yii\helpers\Html;
                     ) ?>
                 <?php endif; ?>
             </p><br>
-        <?php endforeach; ?>
+        <?php
+        endforeach;
+        \yii\widgets\Pjax::end();
+        ?>
         <br>
         <!--        <p>-->
         <!--            --><? //= Html::a(Yii::t("main", "TaskAddComment"),

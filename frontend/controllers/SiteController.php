@@ -11,7 +11,7 @@ use yii\filters\AccessControl;
 use common\models\LoginForm;
 use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
-use frontend\models\SignupForm;
+use common\models\forms\SignupForm;
 use frontend\models\ContactForm;
 
 /**

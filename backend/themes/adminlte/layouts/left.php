@@ -31,6 +31,8 @@
                 'options' => ['class' => 'sidebar-menu tree', 'data-widget'=> 'tree'],
                 'items' => [
                     ['label' => 'Menu Yii2', 'options' => ['class' => 'header']],
+                    ['label' => 'Tasks', 'icon' => 'file-code-o', 'url' => ['/tasks']],
+                    ['label' => 'Users', 'icon' => 'file-code-o', 'url' => ['/users']],
                     ['label' => 'Gii', 'icon' => 'file-code-o', 'url' => ['/gii']],
                     ['label' => 'Debug', 'icon' => 'dashboard', 'url' => ['/debug']],
                     ['label' => 'Login', 'url' => ['site/login'], 'visible' => Yii::$app->user->isGuest],

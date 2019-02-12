@@ -61,4 +61,10 @@ class TaskStatuses extends \yii\db\ActiveRecord
                 ->indexBy('id')
                 ->all(), 'id', 'name');
     }
+
+
+    public static function getStatuses()
+    {
+        return static::find()->select(['name', 'id'])->indexBy('id')->column();
+    }
 }

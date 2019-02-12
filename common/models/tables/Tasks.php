@@ -107,7 +107,8 @@ class Tasks extends ActiveRecord
         // текущего класса
     }
 
-    public function getStatus()
+    public function getStatusName()
+//    public function getStatus()
     {
         return $this->hasOne(TaskStatuses::class, ["id" => "status"]); // ключ - куда ссылается, значение - атрибут
         // текущего класса

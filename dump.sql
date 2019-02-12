@@ -16,6 +16,117 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Table structure for table `auth_assignment`
+--
+
+DROP TABLE IF EXISTS `auth_assignment`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `auth_assignment` (
+  `item_name` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
+  `user_id` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
+  `created_at` int(11) DEFAULT NULL,
+  PRIMARY KEY (`item_name`,`user_id`),
+  KEY `idx-auth_assignment-user_id` (`user_id`),
+  CONSTRAINT `auth_assignment_ibfk_1` FOREIGN KEY (`item_name`) REFERENCES `auth_item` (`name`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `auth_assignment`
+--
+
+LOCK TABLES `auth_assignment` WRITE;
+/*!40000 ALTER TABLE `auth_assignment` DISABLE KEYS */;
+INSERT INTO `auth_assignment` VALUES ('admin','1',1550033489),('moderator','2',1550033489),('user','10',1550036438),('user','11',1550036834),('user','3',1550034214),('user','7',1550034742),('user','8',1550035530),('user','9',1550035737);
+/*!40000 ALTER TABLE `auth_assignment` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `auth_item`
+--
+
+DROP TABLE IF EXISTS `auth_item`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `auth_item` (
+  `name` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
+  `type` smallint(6) NOT NULL,
+  `description` text COLLATE utf8_unicode_ci,
+  `rule_name` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `data` blob,
+  `created_at` int(11) DEFAULT NULL,
+  `updated_at` int(11) DEFAULT NULL,
+  PRIMARY KEY (`name`),
+  KEY `rule_name` (`rule_name`),
+  KEY `idx-auth_item-type` (`type`),
+  CONSTRAINT `auth_item_ibfk_1` FOREIGN KEY (`rule_name`) REFERENCES `auth_rule` (`name`) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `auth_item`
+--
+
+LOCK TABLES `auth_item` WRITE;
+/*!40000 ALTER TABLE `auth_item` DISABLE KEYS */;
+INSERT INTO `auth_item` VALUES ('admin',1,NULL,NULL,NULL,1550033488,1550033488),('moderator',1,NULL,NULL,NULL,1550033489,1550033489),('TaskCreate',2,NULL,NULL,NULL,1550033489,1550033489),('TaskDelete',2,NULL,NULL,NULL,1550033489,1550033489),('TaskEdit',2,NULL,NULL,NULL,1550033489,1550033489),('user',1,NULL,NULL,NULL,1550034214,1550034214);
+/*!40000 ALTER TABLE `auth_item` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `auth_item_child`
+--
+
+DROP TABLE IF EXISTS `auth_item_child`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `auth_item_child` (
+  `parent` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
+  `child` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`parent`,`child`),
+  KEY `child` (`child`),
+  CONSTRAINT `auth_item_child_ibfk_1` FOREIGN KEY (`parent`) REFERENCES `auth_item` (`name`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `auth_item_child_ibfk_2` FOREIGN KEY (`child`) REFERENCES `auth_item` (`name`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `auth_item_child`
+--
+
+LOCK TABLES `auth_item_child` WRITE;
+/*!40000 ALTER TABLE `auth_item_child` DISABLE KEYS */;
+INSERT INTO `auth_item_child` VALUES ('admin','TaskCreate'),('moderator','TaskCreate'),('user','TaskCreate'),('admin','TaskDelete'),('admin','TaskEdit'),('moderator','TaskEdit');
+/*!40000 ALTER TABLE `auth_item_child` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `auth_rule`
+--
+
+DROP TABLE IF EXISTS `auth_rule`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `auth_rule` (
+  `name` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
+  `data` blob,
+  `created_at` int(11) DEFAULT NULL,
+  `updated_at` int(11) DEFAULT NULL,
+  PRIMARY KEY (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `auth_rule`
+--
+
+LOCK TABLES `auth_rule` WRITE;
+/*!40000 ALTER TABLE `auth_rule` DISABLE KEYS */;
+/*!40000 ALTER TABLE `auth_rule` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `chat`
 --
 
@@ -62,7 +173,7 @@ CREATE TABLE `comments` (
   KEY `fk_comments_user` (`user_id`),
   CONSTRAINT `fk_comments_tasks` FOREIGN KEY (`task_id`) REFERENCES `tasks` (`id`),
   CONSTRAINT `fk_comments_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -71,6 +182,7 @@ CREATE TABLE `comments` (
 
 LOCK TABLES `comments` WRITE;
 /*!40000 ALTER TABLE `comments` DISABLE KEYS */;
+INSERT INTO `comments` VALUES (1,1,1,'камент','','2019-02-13 11:18:57','2019-02-13 11:18:57'),(2,1,1,'второй камент','','2019-02-13 11:20:40','2019-02-13 11:20:40'),(3,1,1,'третий камент','','2019-02-13 11:21:53','2019-02-13 11:21:53'),(4,1,1,'444444444','','2019-02-13 11:25:02','2019-02-13 11:25:02'),(5,1,1,'555555555',NULL,'2019-02-13 11:27:33','2019-02-13 11:27:33'),(6,2,1,'ывафываыва',NULL,'2019-02-13 11:28:31','2019-02-13 11:28:31'),(7,2,1,'2222222222',NULL,'2019-02-13 11:31:41','2019-02-13 11:31:41'),(8,2,1,'333333333333333',NULL,'2019-02-13 11:35:00','2019-02-13 11:35:00'),(9,2,1,'44444',NULL,'2019-02-13 11:41:31','2019-02-13 11:41:31'),(10,2,1,'555',NULL,'2019-02-13 11:42:57','2019-02-13 11:42:57'),(11,2,1,'666',NULL,'2019-02-13 11:50:59','2019-02-13 11:50:59'),(12,3,1,'111111111111',NULL,'2019-02-13 11:51:54','2019-02-13 11:51:54'),(13,3,1,'222222222',NULL,'2019-02-13 11:52:39','2019-02-13 11:52:39'),(14,3,1,'3333333',NULL,'2019-02-13 11:52:46','2019-02-13 11:52:46');
 /*!40000 ALTER TABLE `comments` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -94,7 +206,7 @@ CREATE TABLE `migration` (
 
 LOCK TABLES `migration` WRITE;
 /*!40000 ALTER TABLE `migration` DISABLE KEYS */;
-INSERT INTO `migration` VALUES ('m000000_000000_base',1549124065),('m130524_201442_init',1549124084),('m190205_052429_create_tasks_table',1549348770),('m190205_054956_create_task_statuses_table',1549348771),('m190205_064518_create_comments_table',1549349699),('m190205_065623_create_task_attachments_table',1549349926),('m190209_103740_create_chat_table',1549709059),('m190209_155811_create_task_chat_table',1549728522);
+INSERT INTO `migration` VALUES ('m000000_000000_base',1549124065),('m130524_201442_init',1549124084),('m140506_102106_rbac_init',1550000608),('m170907_052038_rbac_add_index_on_auth_assignment_user_id',1550000608),('m180523_151638_rbac_updates_indexes_without_prefix',1550000608),('m190205_052429_create_tasks_table',1549348770),('m190205_054956_create_task_statuses_table',1549348771),('m190205_064518_create_comments_table',1549349699),('m190205_065623_create_task_attachments_table',1549349926),('m190209_103740_create_chat_table',1549709059),('m190209_155811_create_task_chat_table',1549728522);
 /*!40000 ALTER TABLE `migration` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -112,7 +224,7 @@ CREATE TABLE `task_attachments` (
   PRIMARY KEY (`id`),
   KEY `fk_attachments_tasks` (`task_id`),
   CONSTRAINT `fk_attachments_tasks` FOREIGN KEY (`task_id`) REFERENCES `tasks` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -121,6 +233,7 @@ CREATE TABLE `task_attachments` (
 
 LOCK TABLES `task_attachments` WRITE;
 /*!40000 ALTER TABLE `task_attachments` DISABLE KEYS */;
+INSERT INTO `task_attachments` VALUES (13,1,'fRMAXrZOewvf.png'),(14,2,'1odepelvhjsp.jpg');
 /*!40000 ALTER TABLE `task_attachments` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -141,7 +254,7 @@ CREATE TABLE `task_chat` (
   KEY `fk_task_chat_user` (`user_id`),
   CONSTRAINT `fk_task_chat_tasks` FOREIGN KEY (`task_id`) REFERENCES `tasks` (`id`),
   CONSTRAINT `fk_task_chat_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -150,7 +263,7 @@ CREATE TABLE `task_chat` (
 
 LOCK TABLES `task_chat` WRITE;
 /*!40000 ALTER TABLE `task_chat` DISABLE KEYS */;
-INSERT INTO `task_chat` VALUES (1,1,3,'1234'),(2,1,NULL,'4321');
+INSERT INTO `task_chat` VALUES (1,1,3,'1234'),(2,1,NULL,'4321'),(3,1,NULL,'5554443333'),(4,1,NULL,'666'),(5,1,NULL,'777'),(6,1,2,'9999'),(7,1,2,'000'),(8,1,NULL,'aaaaaaaaa'),(9,1,1,'lllllllllllll'),(10,1,NULL,'uuuuuuuuuuuu'),(11,2,NULL,'wwwwwwwwww'),(12,1,NULL,'eeeeeeeeeee'),(13,2,NULL,'sssssss');
 /*!40000 ALTER TABLE `task_chat` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -199,7 +312,7 @@ CREATE TABLE `tasks` (
   KEY `fk_task_statuses` (`status`),
   CONSTRAINT `fk_task_statuses` FOREIGN KEY (`status`) REFERENCES `task_statuses` (`id`),
   CONSTRAINT `fk_tasks_users_responsible` FOREIGN KEY (`responsible_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -208,7 +321,7 @@ CREATE TABLE `tasks` (
 
 LOCK TABLES `tasks` WRITE;
 /*!40000 ALTER TABLE `tasks` DISABLE KEYS */;
-INSERT INTO `tasks` VALUES (1,'Новая задача','2019-02-07 00:00:00','Description',1,1,'2019-02-06 11:17:35','2019-02-06 11:17:35'),(2,'Еще одна задача','2019-02-07 00:00:00','sdfasdf asdfasdf',2,1,'2019-02-06 11:19:13','2019-02-06 11:19:13'),(3,'New','2019-02-08 00:00:00','Описание',3,1,'2019-02-06 11:19:47','2019-02-06 11:19:47'),(4,'Test Task 3835','2019-02-07 00:00:00','Test description',1,1,'2019-02-07 15:23:57','2019-02-07 15:23:57'),(5,'Test Task 740','2019-02-07 00:00:00','Test description',1,1,'2019-02-07 15:27:01','2019-02-07 15:27:01'),(6,'New222','2019-01-24 00:00:00','Description',1,1,'2019-02-07 15:28:13','2019-02-07 15:28:13'),(7,'Test Task 3057','2019-02-07 00:00:00','Test description',1,1,'2019-02-07 15:30:00','2019-02-07 15:30:00'),(8,'Test Task 390','2019-02-07 00:00:00','Test description',1,1,'2019-02-07 15:31:24','2019-02-07 15:31:24'),(9,'Test Task 8376','2019-02-07 00:00:00','Test description',1,1,'2019-02-07 15:37:26','2019-02-07 15:37:26'),(10,'Test Task 1237','2019-02-07 00:00:00','Test description',1,1,'2019-02-07 15:39:33','2019-02-07 15:39:33'),(11,'Test Task 6432','2019-02-07 00:00:00','Test description',1,1,'2019-02-07 15:50:59','2019-02-07 15:50:59'),(12,'Test Task 6422','2019-02-07 00:00:00','Test description',1,1,'2019-02-07 15:52:19','2019-02-07 15:52:19');
+INSERT INTO `tasks` VALUES (1,'Новая задача','2019-02-07 00:00:00','Description55',1,2,'2019-02-06 11:17:35','2019-02-13 11:24:40'),(2,'Еще одна задача','2019-02-10 12:00:00','sdfasdf asdfasdf33333333333',3,1,'2019-02-06 11:19:13','2019-02-12 11:50:40'),(3,'New','2019-02-08 00:00:00','Описание',2,2,'2019-02-06 11:19:47','2019-02-12 12:10:09'),(4,'Test Task 3835','2019-02-07 00:00:00','Test description',1,1,'2019-02-07 15:23:57','2019-02-07 15:23:57'),(5,'Test Task 740','2019-02-07 00:00:00','Test description',1,1,'2019-02-07 15:27:01','2019-02-07 15:27:01'),(6,'New222','2019-01-24 00:00:00','Description',1,1,'2019-02-07 15:28:13','2019-02-07 15:28:13'),(7,'Test Task 3057','2019-02-07 00:00:00','Test description',1,1,'2019-02-07 15:30:00','2019-02-07 15:30:00'),(9,'Test Task 8376','2019-02-07 00:00:00','Test description',1,1,'2019-02-07 15:37:26','2019-02-07 15:37:26'),(10,'Test Task 1237','2019-02-07 00:00:00','Test description',1,1,'2019-02-07 15:39:33','2019-02-07 15:39:33'),(11,'Test Task 6432','2019-02-07 00:00:00','Test description',1,1,'2019-02-07 15:50:59','2019-02-07 15:50:59'),(12,'Test Task 6422','2019-02-07 00:00:00','Test description',1,1,'2019-02-07 15:52:19','2019-02-07 15:52:19'),(13,'Суперновая задача','2019-02-14 14:30:00','фывафываыв ывафываыв',7,4,'2019-02-12 22:19:26','2019-02-12 22:28:20');
 /*!40000 ALTER TABLE `tasks` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -233,7 +346,7 @@ CREATE TABLE `user` (
   UNIQUE KEY `username` (`username`),
   UNIQUE KEY `email` (`email`),
   UNIQUE KEY `password_reset_token` (`password_reset_token`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -242,7 +355,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'admin','h5BeTrFChp_VvFI_IUrGmBvYwIrhc38d','$2y$13$vZy39YyOwBW7Rw9POBT1me8lGSIy5DZ5jp.CkgJaYkC3wW1v0/HyK',NULL,'admin@admin.ru',10,1549541983,1549541983),(2,'user','nUTUREWU8Cn0Ds3DmxNr2YsrOkHZqyk3','$2y$13$3rgLr0pM7PYD7ryfah0g5OHJ8SKEEH5/h77Bhe9n7bvk8teGxdpyi',NULL,'user@mail.ru',10,1549542045,1549542045),(3,'Vasya','2t_VYPWTjz4ELLZ2WlIpV81ZT98iWScs','$2y$13$kQ4qgFzDWncMej/YubJw3exQRVO4NGBaydypPN5gaKOqIbPmzWCF2',NULL,'vasya@mail.ru',10,1549542068,1549542068);
+INSERT INTO `user` VALUES (1,'admin','h5BeTrFChp_VvFI_IUrGmBvYwIrhc38d','$2y$13$vZy39YyOwBW7Rw9POBT1me8lGSIy5DZ5jp.CkgJaYkC3wW1v0/HyK',NULL,'admin@admin.ru',10,1549541983,1549541983),(2,'user','nUTUREWU8Cn0Ds3DmxNr2YsrOkHZqyk3','$2y$13$3rgLr0pM7PYD7ryfah0g5OHJ8SKEEH5/h77Bhe9n7bvk8teGxdpyi',NULL,'user@mail.ru',10,1549542045,1549542045),(3,'Vasya','2t_VYPWTjz4ELLZ2WlIpV81ZT98iWScs','$2y$13$kQ4qgFzDWncMej/YubJw3exQRVO4NGBaydypPN5gaKOqIbPmzWCF2',NULL,'vasya@mail.ru',10,1549542068,1549542068),(7,'Marusya','9jwUM1wn_Hsna_QWqczDQ6UezTRzTMrt','$2y$13$bxww3I7FvcMLE/uLjCj/0.RY6sBHq.Ums6ox3IpAIss/.NXT2OUMG',NULL,'marusya@mail.ru',10,1550034742,1550034742),(8,'Filya','YpDUkfZX5yMWPFMPTYg9HhmI71qPZO8k','$2y$13$kkHz8O8mD2JZucxIF7f2J.rfIt2VNRNq9CHDtSXLcnq5iU0E9J2Z6',NULL,'filya@prostofilya.ru',10,1550035530,1550035530),(9,'Petya','nVdpX7ptfLWJ1xdsXVVMBxcTiU-gscCk','$2y$13$Rp1VtS88gdnw4v2.jLGUe.0zvqrNxfvnJ8GUZP46gKfa3hbfB4Hua',NULL,'petya@mail.ru',10,1550035737,1550035737),(10,'Vanya','w56v2FY_4uueCfEDTtFwOfg3SNzk7FTg','$2y$13$f/tz1WTcxayuP53B5QVIouv81UwfGviw45TfsRAyalIUQnp.UuTTm',NULL,'vanya@mail.ru',10,1550036438,1550036438),(11,'Tohin','-PC255o0WiOkcDVLiNt0WqBMtsfLK7Cv','$2y$13$EVliRxpcdD7AIT2mggeSnO1.aDdldLUsnwRXhipgr.tFMmi9nJL.q',NULL,'tohin666@gmail.com',10,1550036834,1550036834);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -255,4 +368,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-02-09 20:34:21
+-- Dump completed on 2019-02-13 12:03:48
