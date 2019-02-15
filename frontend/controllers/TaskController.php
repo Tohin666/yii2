@@ -80,33 +80,32 @@ class TaskController extends Controller
             if ($model = Tasks::findOne($id)) {
                 $model->load(\Yii::$app->request->post());
                 $model->save();
-                \Yii::$app->session->setFlash('success', "Изменения сохранены!");
-            } else {
-                \Yii::$app->session->setFlash('error', "Не удалось сохранить изменения!");
+//                \Yii::$app->session->setFlash('success', "Изменения сохранены!");
             }
+//            else {
+//                \Yii::$app->session->setFlash('error', "Не удалось сохранить изменения!");
+//            }
 
 
             // если создаем таск
         } else {
             $model = new Tasks();
 
-            if ($model->load(\Yii::$app->request->post()) && $model->save()) {
-
-                // если отправлены данные и они успешно приняты, то перенаправляем назад.
-                \Yii::$app->session->setFlash('success', "Задача создана!");
-
-            } else {
-                \Yii::$app->session->setFlash('error', "Не удалось создать задачу!");
-            }
+            $model->load(\Yii::$app->request->post()) && $model->save();
+//            if ($model->load(\Yii::$app->request->post()) && $model->save()) {
+//                \Yii::$app->session->setFlash('success', "Задача создана!");
+//            } else {
+//                \Yii::$app->session->setFlash('error', "Не удалось создать задачу!");
+//            }
 
         }
 
 //        $this->redirect(\Yii::$app->request->referrer);
-        return $this->render('view', [
+        return $this->renderAjax('_form', [
             'model' => $model,
             'usersList' => User::getUsersList(),
             'statusesList' => TaskStatuses::getTasksList(),
-            'userId' => \Yii::$app->user->id,
+//            'userId' => \Yii::$app->user->id,
 
         ]);
 
@@ -127,26 +126,25 @@ class TaskController extends Controller
 //                $model->photo = $filename;
 //            }
 
-            if ($comment->save()) {
-                \Yii::$app->session->setFlash('success', "Комментарий добавлен");
-            } else {
-                \Yii::$app->session->setFlash('error', "Не удалось добавить комментарий");
-            }
+            $comment->save();
+//            if ($comment->save()) {
+//                \Yii::$app->session->setFlash('success', "Комментарий добавлен");
+//            } else {
+//                \Yii::$app->session->setFlash('error', "Не удалось добавить комментарий");
+//            }
 
-        } else {
-            \Yii::$app->session->setFlash('error', "Не удалось добавить комментарий");
         }
+//        else {
+//            \Yii::$app->session->setFlash('error', "Не удалось добавить комментарий");
+//        }
 
 
 //        $this->redirect(\Yii::$app->request->referrer);
         $model = Tasks::findOne($comment->task_id);
-        return $this->render('view', [
+        return $this->renderAjax('_comments', [
             'model' => $model,
-            'usersList' => User::getUsersList(),
-            'statusesList' => TaskStatuses::getTasksList(),
             'userId' => \Yii::$app->user->id,
             'taskCommentForm' => new Comments(),
-            'taskAttachmentsForm' => new TaskAttachmentsAddForm(),
         ]);
 
     }
@@ -162,19 +160,16 @@ class TaskController extends Controller
         // отдельно загружаем файл
         $attachment->file = UploadedFile::getInstance($attachment, 'file');
         // метод сейв прописали в модели TaskAttachmentsAddForm
-        if ($attachment->save()) {
-            \Yii::$app->session->setFlash('success', "Файл добавлен");
-        } else {
-            \Yii::$app->session->setFlash('error', "Не удалось добавить файл");
-        }
+        $attachment->save();
+//        if ($attachment->save()) {
+//            \Yii::$app->session->setFlash('success', "Файл добавлен");
+//        } else {
+//            \Yii::$app->session->setFlash('error', "Не удалось добавить файл");
+//        }
 //        $this->redirect(\Yii::$app->request->referrer);
         $model = Tasks::findOne($attachment->taskId);
-        return $this->render('view', [
+        return $this->renderAjax('_attachments', [
             'model' => $model,
-            'usersList' => User::getUsersList(),
-            'statusesList' => TaskStatuses::getTasksList(),
-            'userId' => \Yii::$app->user->id,
-            'taskCommentForm' => new Comments(),
             'taskAttachmentsForm' => new TaskAttachmentsAddForm(),
         ]);
     }
