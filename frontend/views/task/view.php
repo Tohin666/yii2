@@ -10,6 +10,7 @@
 /* @var $this \yii\web\View */
 
 /** @var $history \common\models\tables\TaskChat */
+/** @var $project \common\models\tables\TaskProjects */
 
 use yii\widgets\ActiveForm;
 use yii\helpers\Url;
@@ -22,10 +23,13 @@ use yii\helpers\Html;
 <div class="task-container col-md-9">
     <div class="bg-info task-preview taskView">
 
+        <h1>Проект: <?= $project->name ?></h1>
+
         <?= $this->render('_form', [
             'model' => $model,
             'usersList' => $usersList,
             'statusesList' => $statusesList,
+            'project' => $project,
         ]) ?>
 
         <hr>

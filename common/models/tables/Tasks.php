@@ -16,6 +16,7 @@ use yii\db\Expression;
  * @property string $description
  * @property int $responsible_id
  * @property int $status
+ * @property int $project_id
  *
  * @property User $users
  * @property Comments[] $comments
@@ -58,7 +59,7 @@ class Tasks extends ActiveRecord
             [['title', 'date'], 'required'],
             [['date'], 'safe'],
             [['description'], 'string'],
-            [['responsible_id', 'status'], 'integer'],
+            [['responsible_id', 'status', 'project_id'], 'integer'],
             [['title'], 'string', 'max' => 255],
         ];
     }
@@ -82,6 +83,7 @@ class Tasks extends ActiveRecord
             'description' => "Description",
             'responsible_id' => "Responsible",
             'status' => "Status",
+            'project_id' => "Project",
         ];
     }
 

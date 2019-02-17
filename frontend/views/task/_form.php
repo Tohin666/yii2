@@ -2,13 +2,13 @@
 /* @var $model \common\models\tables\Tasks */
 /* @var $statusesList \common\models\tables\TaskStatuses[] */
 /* @var $usersList \common\models\User[] */
+/* @var $project \common\models\tables\TaskProjects */
 
 use yii\widgets\ActiveForm;
 use yii\helpers\{Url, Html};
 
 // Юзеры могут только просматривать задачи.
-if (!\Yii::$app->user->can('TaskEdit')) :
-    ?>
+if (!\Yii::$app->user->can('TaskEdit')) : ?>
     <h2>Задача:<br><?= $model->title ?></h2>
     <p>Описание: <?= $model->description ?></p>
     <h3>Дата: <?= $model->date ?></h3>
@@ -26,6 +26,7 @@ if (!\Yii::$app->user->can('TaskEdit')) :
         ],
     ])
     ?>
+    <?= $form->field($model, 'project_id')->hiddenInput(['value' => $project->id])->label(false) ?>
     <h2><?= $form->field($model, 'title') ?></h2><br>
     <p><?= $form->field($model, 'description')->textarea() ?></p><br>
     <h3><?= $form->field($model, 'date')

@@ -4,6 +4,7 @@ namespace frontend\controllers;
 
 use common\models\tables\Comments;
 use common\models\tables\TaskChat;
+use common\models\tables\TaskProjects;
 use common\models\tables\Tasks;
 use common\models\tables\TaskStatuses;
 use common\models\User;
@@ -19,22 +20,49 @@ class TaskController extends Controller
     public function actionIndex()
     {
 
-        if ($post = \Yii::$app->request->post()) {
-            // если делаем фильтр по месяцам
-            $query = Tasks::find()->where(['YEAR(date)' => $post['year'], 'MONTH(date)' => $post['month']]);
+        $model = new TaskProjects();
+        $query = TaskProjects::find();
 
-        } else {
-            $query = Tasks::find();
-        }
-
-        // подготавливаем датапровайдер для списка тасков (листвью)
+        // подготавливаем датапровайдер для списка проектов (листвью)
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
 
         return $this->render('index', [
-            'dataProvider' => $dataProvider
+            'dataProvider' => $dataProvider,
+            'model' => $model,
         ]);
+    }
+
+
+    public function actionProject($project_id = null)
+    {
+        $model = new Tasks();
+
+        if ($project = \Yii::$app->request->post('TaskProjects')) {
+            // если новый проект
+            $modelProject = new TaskProjects();
+            $modelProject->name = $project['name'];
+            $modelProject->save();
+
+            return $this->render('project', [
+                'model' => $model,
+                'modelProject' => $modelProject,
+            ]);
+
+        } else {
+            $modelProject = TaskProjects::findOne($project_id);
+            $query = Tasks::find()->where(['project_id' => $project_id]);
+            // подготавливаем датапровайдер для списка тасков (листвью)
+            $dataProvider = new ActiveDataProvider([
+                'query' => $query,
+            ]);
+            return $this->render('project', [
+                'model' => $model,
+                'modelProject' => $modelProject,
+                'dataProvider' => $dataProvider
+            ]);
+        }
 
     }
 
@@ -46,6 +74,8 @@ class TaskController extends Controller
 //            throw new ForbiddenHttpException();
 //        }
 
+        $projectId = \Yii::$app->request->get('project-id');
+        $project = TaskProjects::findOne($projectId);
 
         // Если открываем таск
         if ($id) {
@@ -67,6 +97,7 @@ class TaskController extends Controller
             'taskCommentForm' => new Comments(),
             'taskAttachmentsForm' => new TaskAttachmentsAddForm(),
             'history' => $history,
+            'project' => $project,
         ]);
 
     }
