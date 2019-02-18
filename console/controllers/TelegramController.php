@@ -3,6 +3,8 @@
 namespace console\controllers;
 
 
+use common\models\tables\TaskProjects;
+use common\models\tables\Tasks;
 use common\models\tables\TelegramOffset;
 use common\models\tables\TelegramSubscribe;
 use SonkoDmitry\Yii\TelegramBot\Component;
@@ -93,6 +95,31 @@ class TelegramController extends Controller
                 ]);
                 if ($model->save()) {
                     $response = "Вы подписаны на оповещения об обновлении проектов";
+                } else {
+                    $response = "Error";
+                }
+                break;
+            case '/project_create':
+                $model = new TaskProjects([
+                    'name' => $params[1],
+                ]);
+                if ($model->save()) {
+                    $response = "Project '{$params[1]}' created successfully!";
+                } else {
+                    $response = "Error";
+                }
+                break;
+            case '/task_create':
+                $model = new Tasks([
+                    'title' => $params[1],
+                    'date' => date("Y-m-d H:i:s"),
+                    'description' => "No description",
+                    'responsible_id' => $params[2],
+                    'status' => 1,
+                    'project_id' => $params[3],
+                ]);
+                if ($model->save()) {
+                    $response = "Task '{$params[1]}' created successfully!";
                 } else {
                     $response = "Error";
                 }

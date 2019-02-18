@@ -31,6 +31,7 @@
                 'options' => ['class' => 'sidebar-menu tree', 'data-widget'=> 'tree'],
                 'items' => [
                     ['label' => 'Menu Yii2', 'options' => ['class' => 'header']],
+                    ['label' => 'Projects', 'icon' => 'file-code-o', 'url' => ['/task-projects']],
                     ['label' => 'Tasks', 'icon' => 'file-code-o', 'url' => ['/tasks']],
                     ['label' => 'Users', 'icon' => 'file-code-o', 'url' => ['/users']],
                     ['label' => 'Gii', 'icon' => 'file-code-o', 'url' => ['/gii']],
