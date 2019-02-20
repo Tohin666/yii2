@@ -14,6 +14,9 @@ return [
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-frontend',
+            'parsers' => [
+                'application/json' => 'yii\web\JsonParser',
+            ]
         ],
         'user' => [
             'identityClass' => 'common\models\User',
@@ -45,14 +48,21 @@ return [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
-        /*
         'urlManager' => [
             'enablePrettyUrl' => true,
+//            'enableStrictParsing' => true,
             'showScriptName' => false,
             'rules' => [
+//                'GET messages' => 'message/index',
+//                'POST messages' => 'message/create',
+//                'GET messages/<id>' => 'message/view',
+//                'PATCH messages/<id>' => 'message/update',
+//                'DELETE messages/<id>' => 'message/delete',
+                // все вышеописанное заменяет эта строчка:
+                ['class' => 'yii\rest\UrlRule', 'controller' => 'message'],
+                ['class' => 'yii\rest\UrlRule', 'controller' => 'api-task'],
             ],
         ],
-        */
     ],
     'params' => $params,
 ];

@@ -187,6 +187,32 @@ INSERT INTO `comments` VALUES (1,1,1,'камент','','2019-02-13 11:18:57','20
 UNLOCK TABLES;
 
 --
+-- Table structure for table `message`
+--
+
+DROP TABLE IF EXISTS `message`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `message` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `content` text COLLATE utf8_unicode_ci,
+  `user_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `message`
+--
+
+LOCK TABLES `message` WRITE;
+/*!40000 ALTER TABLE `message` DISABLE KEYS */;
+INSERT INTO `message` VALUES (1,'message1','dfasdfasdfsd',1),(2,'message2','wqerqwerqwerwqer',1),(4,'message4','оааоал',2);
+/*!40000 ALTER TABLE `message` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `migration`
 --
 
@@ -206,7 +232,7 @@ CREATE TABLE `migration` (
 
 LOCK TABLES `migration` WRITE;
 /*!40000 ALTER TABLE `migration` DISABLE KEYS */;
-INSERT INTO `migration` VALUES ('m000000_000000_base',1549124065),('m130524_201442_init',1549124084),('m140506_102106_rbac_init',1550000608),('m170907_052038_rbac_add_index_on_auth_assignment_user_id',1550000608),('m180523_151638_rbac_updates_indexes_without_prefix',1550000608),('m190205_052429_create_tasks_table',1549348770),('m190205_054956_create_task_statuses_table',1549348771),('m190205_064518_create_comments_table',1549349699),('m190205_065623_create_task_attachments_table',1549349926),('m190209_103740_create_chat_table',1549709059),('m190209_155811_create_task_chat_table',1549728522),('m190216_073912_create_telegram_offset_table',1550302912),('m190216_112829_create_telegram_subscribe_table',1550316625),('m190216_120659_create_task_projects_table',1550319394);
+INSERT INTO `migration` VALUES ('m000000_000000_base',1549124065),('m130524_201442_init',1549124084),('m140506_102106_rbac_init',1550000608),('m170907_052038_rbac_add_index_on_auth_assignment_user_id',1550000608),('m180523_151638_rbac_updates_indexes_without_prefix',1550000608),('m190205_052429_create_tasks_table',1549348770),('m190205_054956_create_task_statuses_table',1549348771),('m190205_064518_create_comments_table',1549349699),('m190205_065623_create_task_attachments_table',1549349926),('m190209_103740_create_chat_table',1549709059),('m190209_155811_create_task_chat_table',1549728522),('m190216_073912_create_telegram_offset_table',1550302912),('m190216_112829_create_telegram_subscribe_table',1550316625),('m190216_120659_create_task_projects_table',1550319394),('m190219_071451_create_message_table',1550560863);
 /*!40000 ALTER TABLE `migration` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -339,7 +365,7 @@ CREATE TABLE `tasks` (
   CONSTRAINT `fk_task_statuses` FOREIGN KEY (`status`) REFERENCES `task_statuses` (`id`),
   CONSTRAINT `fk_tasks_projects` FOREIGN KEY (`project_id`) REFERENCES `task_projects` (`id`),
   CONSTRAINT `fk_tasks_users_responsible` FOREIGN KEY (`responsible_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -348,7 +374,7 @@ CREATE TABLE `tasks` (
 
 LOCK TABLES `tasks` WRITE;
 /*!40000 ALTER TABLE `tasks` DISABLE KEYS */;
-INSERT INTO `tasks` VALUES (1,'Новая задача','2019-02-07 00:00:00','Description666',1,2,'2019-02-06 11:17:35','2019-02-15 09:00:53',1),(2,'Еще одна задача','2019-02-10 12:00:00','sdfasdf asdfasdf3',3,1,'2019-02-06 11:19:13','2019-02-15 10:19:51',2),(3,'New','2019-02-08 00:00:00','Описание3',2,2,'2019-02-06 11:19:47','2019-02-15 11:06:23',3),(4,'Test Task 3835','2019-02-07 00:00:00','Test description',1,1,'2019-02-07 15:23:57','2019-02-07 15:23:57',5),(5,'Test Task 740','2019-02-07 00:00:00','Test description',1,1,'2019-02-07 15:27:01','2019-02-07 15:27:01',6),(6,'New222','2019-01-24 00:00:00','Description',1,1,'2019-02-07 15:28:13','2019-02-07 15:28:13',7),(7,'Test Task 3057','2019-02-07 00:00:00','Test description',1,1,'2019-02-07 15:30:00','2019-02-07 15:30:00',1),(9,'Test Task 8376','2019-02-07 00:00:00','Test description',1,1,'2019-02-07 15:37:26','2019-02-07 15:37:26',2),(10,'Test Task 1237','2019-02-07 00:00:00','Test description',1,1,'2019-02-07 15:39:33','2019-02-07 15:39:33',3),(11,'Test Task 6432','2019-02-07 00:00:00','Test description',1,1,'2019-02-07 15:50:59','2019-02-07 15:50:59',5),(12,'Test Task 6422','2019-02-07 00:00:00','Test description',1,1,'2019-02-07 15:52:19','2019-02-07 15:52:19',6),(13,'Суперновая задача','2019-02-14 14:30:00','фывафываыв ывафываыв',7,4,'2019-02-12 22:19:26','2019-02-12 22:28:20',7),(14,'New10','2019-02-18 09:05:00','fgasdg',1,1,'2019-02-17 09:08:41','2019-02-17 09:08:41',10),(16,'New12','2019-02-19 13:25:00','qqqqqqqqq',1,1,'2019-02-17 09:23:51','2019-02-17 09:23:51',12),(17,'TelegramTask','2019-02-18 15:43:46','No description',1,1,'2019-02-18 15:43:46','2019-02-18 15:43:46',19);
+INSERT INTO `tasks` VALUES (1,'Новая задача','2019-02-07 00:00:00','Description666',1,2,'2019-02-06 11:17:35','2019-02-15 09:00:53',1),(2,'Еще одна задача','2019-02-10 12:00:00','sdfasdf asdfasdf3',3,1,'2019-02-06 11:19:13','2019-02-15 10:19:51',2),(3,'New','2019-02-08 00:00:00','Описание3',2,2,'2019-02-06 11:19:47','2019-02-15 11:06:23',3),(4,'Test Task 3835','2019-02-07 00:00:00','Test description',1,1,'2019-02-07 15:23:57','2019-02-07 15:23:57',5),(5,'Test Task 740','2019-02-07 00:00:00','Test description',1,1,'2019-02-07 15:27:01','2019-02-07 15:27:01',6),(6,'New222','2019-01-24 00:00:00','Description',1,1,'2019-02-07 15:28:13','2019-02-07 15:28:13',7),(7,'Test Task 3057','2019-02-07 00:00:00','Test description',1,1,'2019-02-07 15:30:00','2019-02-07 15:30:00',1),(9,'Test Task 8376','2019-02-07 00:00:00','Test description',1,1,'2019-02-07 15:37:26','2019-02-07 15:37:26',2),(10,'Test Task 1237','2019-02-07 00:00:00','Test description',1,1,'2019-02-07 15:39:33','2019-02-07 15:39:33',3),(11,'Test Task 6432','2019-02-07 00:00:00','Test description',1,1,'2019-02-07 15:50:59','2019-02-07 15:50:59',5),(12,'Test Task 6422','2019-02-07 00:00:00','Test description',1,1,'2019-02-07 15:52:19','2019-02-07 15:52:19',6),(13,'Суперновая задача','2019-02-14 14:30:00','фывафываыв ывафываыв',7,4,'2019-02-12 22:19:26','2019-02-12 22:28:20',7),(14,'New10','2019-02-18 09:05:00','fgasdg',1,1,'2019-02-17 09:08:41','2019-02-17 09:08:41',10),(16,'New12','2019-02-19 13:25:00','qqqqqqqqq',1,1,'2019-02-17 09:23:51','2019-02-17 09:23:51',12),(17,'TelegramTask','2019-02-18 15:43:46','No description',1,1,'2019-02-18 15:43:46','2019-02-18 15:43:46',19),(18,'REST задача','2019-02-10 12:00:00','rrrrrrrrrrr',3,2,'2019-02-20 10:19:48','2019-02-20 10:21:05',2);
 /*!40000 ALTER TABLE `tasks` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -443,4 +469,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-02-18 15:45:18
+-- Dump completed on 2019-02-20 10:36:21

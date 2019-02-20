@@ -88,7 +88,6 @@ class Tasks extends ActiveRecord
     }
 
 
-
     // геттер. при запросе ответственного привяжет его имя по айди. название метода немного не правильное?.
     public function getUsers()
     {
