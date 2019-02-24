@@ -11,6 +11,11 @@ return [
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'controllerNamespace' => 'frontend\controllers',
+    'modules' => [
+        'v2api' => [
+            'class' => 'frontend\modules\v2api\Module',
+        ],
+    ],
     'components' => [
         'request' => [
             'csrfParam' => '_csrf-frontend',
@@ -61,6 +66,7 @@ return [
                 // все вышеописанное заменяет эта строчка:
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'message'],
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'api-task'],
+                ['class' => 'yii\rest\UrlRule', 'controller' => 'v2api/api-task'],
             ],
         ],
     ],

@@ -21,6 +21,8 @@ use yii\web\IdentityInterface;
  * @property integer $created_at
  * @property integer $updated_at
  * @property string $password write-only password
+ *
+ * @property string $access_token
  */
 class User extends ActiveRecord implements IdentityInterface
 {
@@ -70,7 +72,9 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public static function findIdentityByAccessToken($token, $type = null)
     {
-        throw new NotSupportedException('"findIdentityByAccessToken" is not implemented.');
+//        throw new NotSupportedException('"findIdentityByAccessToken" is not implemented.');
+        // реализуем аутентификацию через апи по токену
+        return static::findOne(['access_token' => $token]);
     }
 
     /**
@@ -203,4 +207,15 @@ class User extends ActiveRecord implements IdentityInterface
 //        return static::find()->select(['username', 'id'])->indexBy('id')->column();
 
     }
+
+
+    /**
+     * Генерирует токен для доступа через апи
+     */
+    public function generateAccessToken()
+    {
+        $this->access_token = Yii::$app->security->generateRandomString();
+    }
+
+
 }

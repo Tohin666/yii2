@@ -232,7 +232,7 @@ CREATE TABLE `migration` (
 
 LOCK TABLES `migration` WRITE;
 /*!40000 ALTER TABLE `migration` DISABLE KEYS */;
-INSERT INTO `migration` VALUES ('m000000_000000_base',1549124065),('m130524_201442_init',1549124084),('m140506_102106_rbac_init',1550000608),('m170907_052038_rbac_add_index_on_auth_assignment_user_id',1550000608),('m180523_151638_rbac_updates_indexes_without_prefix',1550000608),('m190205_052429_create_tasks_table',1549348770),('m190205_054956_create_task_statuses_table',1549348771),('m190205_064518_create_comments_table',1549349699),('m190205_065623_create_task_attachments_table',1549349926),('m190209_103740_create_chat_table',1549709059),('m190209_155811_create_task_chat_table',1549728522),('m190216_073912_create_telegram_offset_table',1550302912),('m190216_112829_create_telegram_subscribe_table',1550316625),('m190216_120659_create_task_projects_table',1550319394),('m190219_071451_create_message_table',1550560863);
+INSERT INTO `migration` VALUES ('m000000_000000_base',1549124065),('m130524_201442_init',1549124084),('m140506_102106_rbac_init',1550000608),('m170907_052038_rbac_add_index_on_auth_assignment_user_id',1550000608),('m180523_151638_rbac_updates_indexes_without_prefix',1550000608),('m190205_052429_create_tasks_table',1549348770),('m190205_054956_create_task_statuses_table',1549348771),('m190205_064518_create_comments_table',1549349699),('m190205_065623_create_task_attachments_table',1549349926),('m190209_103740_create_chat_table',1549709059),('m190209_155811_create_task_chat_table',1549728522),('m190216_073912_create_telegram_offset_table',1550302912),('m190216_112829_create_telegram_subscribe_table',1550316625),('m190216_120659_create_task_projects_table',1550319394),('m190219_071451_create_message_table',1550560863),('m190222_073828_add_access_token_column_to_user_table',1550821287);
 /*!40000 ALTER TABLE `migration` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -443,10 +443,12 @@ CREATE TABLE `user` (
   `status` smallint(6) NOT NULL DEFAULT '10',
   `created_at` int(11) NOT NULL,
   `updated_at` int(11) NOT NULL,
+  `access_token` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`),
   UNIQUE KEY `email` (`email`),
-  UNIQUE KEY `password_reset_token` (`password_reset_token`)
+  UNIQUE KEY `password_reset_token` (`password_reset_token`),
+  UNIQUE KEY `access_token` (`access_token`)
 ) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -456,7 +458,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'admin','h5BeTrFChp_VvFI_IUrGmBvYwIrhc38d','$2y$13$vZy39YyOwBW7Rw9POBT1me8lGSIy5DZ5jp.CkgJaYkC3wW1v0/HyK',NULL,'admin@admin.ru',10,1549541983,1549541983),(2,'user','nUTUREWU8Cn0Ds3DmxNr2YsrOkHZqyk3','$2y$13$3rgLr0pM7PYD7ryfah0g5OHJ8SKEEH5/h77Bhe9n7bvk8teGxdpyi',NULL,'user@mail.ru',10,1549542045,1549542045),(3,'Vasya','2t_VYPWTjz4ELLZ2WlIpV81ZT98iWScs','$2y$13$kQ4qgFzDWncMej/YubJw3exQRVO4NGBaydypPN5gaKOqIbPmzWCF2',NULL,'vasya@mail.ru',10,1549542068,1549542068),(7,'Marusya','9jwUM1wn_Hsna_QWqczDQ6UezTRzTMrt','$2y$13$bxww3I7FvcMLE/uLjCj/0.RY6sBHq.Ums6ox3IpAIss/.NXT2OUMG',NULL,'marusya@mail.ru',10,1550034742,1550034742),(8,'Filya','YpDUkfZX5yMWPFMPTYg9HhmI71qPZO8k','$2y$13$kkHz8O8mD2JZucxIF7f2J.rfIt2VNRNq9CHDtSXLcnq5iU0E9J2Z6',NULL,'filya@prostofilya.ru',10,1550035530,1550035530),(9,'Petya','nVdpX7ptfLWJ1xdsXVVMBxcTiU-gscCk','$2y$13$Rp1VtS88gdnw4v2.jLGUe.0zvqrNxfvnJ8GUZP46gKfa3hbfB4Hua',NULL,'petya@mail.ru',10,1550035737,1550035737),(10,'Vanya','w56v2FY_4uueCfEDTtFwOfg3SNzk7FTg','$2y$13$f/tz1WTcxayuP53B5QVIouv81UwfGviw45TfsRAyalIUQnp.UuTTm',NULL,'vanya@mail.ru',10,1550036438,1550036438),(11,'Tohin','-PC255o0WiOkcDVLiNt0WqBMtsfLK7Cv','$2y$13$EVliRxpcdD7AIT2mggeSnO1.aDdldLUsnwRXhipgr.tFMmi9nJL.q',NULL,'tohin666@gmail.com',10,1550036834,1550036834);
+INSERT INTO `user` VALUES (1,'admin','h5BeTrFChp_VvFI_IUrGmBvYwIrhc38d','$2y$13$vZy39YyOwBW7Rw9POBT1me8lGSIy5DZ5jp.CkgJaYkC3wW1v0/HyK',NULL,'admin@admin.ru',10,1549541983,1549541983,'111'),(2,'user','nUTUREWU8Cn0Ds3DmxNr2YsrOkHZqyk3','$2y$13$3rgLr0pM7PYD7ryfah0g5OHJ8SKEEH5/h77Bhe9n7bvk8teGxdpyi',NULL,'user@mail.ru',10,1549542045,1549542045,NULL),(3,'Vasya','2t_VYPWTjz4ELLZ2WlIpV81ZT98iWScs','$2y$13$kQ4qgFzDWncMej/YubJw3exQRVO4NGBaydypPN5gaKOqIbPmzWCF2',NULL,'vasya@mail.ru',10,1549542068,1549542068,NULL),(7,'Marusya','9jwUM1wn_Hsna_QWqczDQ6UezTRzTMrt','$2y$13$bxww3I7FvcMLE/uLjCj/0.RY6sBHq.Ums6ox3IpAIss/.NXT2OUMG',NULL,'marusya@mail.ru',10,1550034742,1550034742,NULL),(8,'Filya','YpDUkfZX5yMWPFMPTYg9HhmI71qPZO8k','$2y$13$kkHz8O8mD2JZucxIF7f2J.rfIt2VNRNq9CHDtSXLcnq5iU0E9J2Z6',NULL,'filya@prostofilya.ru',10,1550035530,1550035530,NULL),(9,'Petya','nVdpX7ptfLWJ1xdsXVVMBxcTiU-gscCk','$2y$13$Rp1VtS88gdnw4v2.jLGUe.0zvqrNxfvnJ8GUZP46gKfa3hbfB4Hua',NULL,'petya@mail.ru',10,1550035737,1550035737,NULL),(10,'Vanya','w56v2FY_4uueCfEDTtFwOfg3SNzk7FTg','$2y$13$f/tz1WTcxayuP53B5QVIouv81UwfGviw45TfsRAyalIUQnp.UuTTm',NULL,'vanya@mail.ru',10,1550036438,1550036438,NULL),(11,'Tohin','-PC255o0WiOkcDVLiNt0WqBMtsfLK7Cv','$2y$13$EVliRxpcdD7AIT2mggeSnO1.aDdldLUsnwRXhipgr.tFMmi9nJL.q',NULL,'tohin666@gmail.com',10,1550036834,1550036834,NULL);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -469,4 +471,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-02-20 10:36:21
+-- Dump completed on 2019-02-22 11:56:01
