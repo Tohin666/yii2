@@ -37,6 +37,7 @@ class TaskController extends Controller
 
     public function actionProject($project_id = null)
     {
+
         $model = new Tasks();
 
         if ($project = \Yii::$app->request->post('TaskProjects')) {
@@ -74,17 +75,20 @@ class TaskController extends Controller
 //            throw new ForbiddenHttpException();
 //        }
 
-        $projectId = \Yii::$app->request->get('project-id');
-        $project = TaskProjects::findOne($projectId);
+
 
         // Если открываем таск
         if ($id) {
             $model = Tasks::findOne($id);
+            $project = TaskProjects::findOne($model->project_id);
             // подгружаем историю чата
             $history = TaskChat::find()->where(['task_id' => $id])->all();
+
             //Если создаем таск
         } else {
             $model = new Tasks();
+            $projectId = \Yii::$app->request->get('project-id');
+            $project = TaskProjects::findOne($projectId);
             $history = null;
         }
 

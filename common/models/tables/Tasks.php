@@ -18,7 +18,12 @@ use yii\db\Expression;
  * @property int $status
  * @property int $project_id
  *
+ * @property string $created_at
+ * @property string $updated_at
+ * @property int $administrator_id
+ *
  * @property User $users
+ * @property User $administrator
  * @property Comments[] $comments
  * @property TaskAttachments[] $taskAttachments
  * @property TaskStatuses $statusName
@@ -59,7 +64,7 @@ class Tasks extends ActiveRecord
             [['title', 'date'], 'required'],
             [['date'], 'safe'],
             [['description'], 'string'],
-            [['responsible_id', 'status', 'project_id'], 'integer'],
+            [['responsible_id', 'administrator_id', 'status', 'project_id'], 'integer'],
             [['title'], 'string', 'max' => 255],
         ];
     }
@@ -84,14 +89,24 @@ class Tasks extends ActiveRecord
             'responsible_id' => "Responsible",
             'status' => "Status",
             'project_id' => "Project",
+            'created_at' => "CreateDate",
+            'updated_at' => "UpdateDate",
+            'administrator_id' => "Administrator",
         ];
     }
 
 
     // геттер. при запросе ответственного привяжет его имя по айди. название метода немного не правильное?.
+    // getResponsible
     public function getUsers()
     {
         return $this->hasOne(User::class, ["id" => "responsible_id"]);
+
+    }
+
+    public function getAdministrator()
+    {
+        return $this->hasOne(User::class, ["id" => "administrator_id"]);
 
     }
 

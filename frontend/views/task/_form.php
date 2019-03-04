@@ -45,6 +45,7 @@ if (!\Yii::$app->user->can('TaskEdit')) : ?>
             ])
         ?></h3>
     <h4><?= $form->field($model, 'responsible_id')->dropDownList($usersList) ?></h4><br>
+    <h4><?= $form->field($model, 'administrator_id')->dropDownList($usersList) ?></h4><br>
     <h4><?= $form->field($model, 'status')->dropDownList($statusesList) ?></h4><br>
     <?= Html::submitButton("Save", ['class' => 'btn btn-success']) ?>
     <!--        --><? //= Html::submitButton(Yii::t("main", "Save"), ['class' => 'btn btn-success']) ?>
@@ -54,3 +55,6 @@ if (!\Yii::$app->user->can('TaskEdit')) : ?>
     ?>
 
 <?php endif; ?>
+
+<?php if ($model->created_at) : ?><h4>Дата постановки: <?= $model->created_at ?></h4><?php endif; ?>
+<?php if ($model->status == 3) : ?><h4>Дата выполнения: <?= $model->updated_at ?></h4><?php endif; ?>

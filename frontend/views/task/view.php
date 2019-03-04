@@ -18,10 +18,15 @@ use yii\helpers\Html;
 
 \frontend\assets\TaskViewAsset::register($this);
 \frontend\assets\TaskChatViewAsset::register($this);
+
+$taskClass = 'bg-info task-preview taskView';
+if ($model->date < date('Y-m-d h:m:s') && $model->status != 3 && $model->status != 6) {
+    $taskClass .= ' taskView-red';
+}
 ?>
 
 <div class="task-container col-md-9">
-    <div class="bg-info task-preview taskView">
+    <div class="<?= $taskClass ?>">
 
         <h1>Проект: <?= $project->name ?></h1>
 

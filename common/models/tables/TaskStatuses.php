@@ -52,6 +52,7 @@ class TaskStatuses extends \yii\db\ActiveRecord
     }
 
 
+    // getStatusList?
     public static function getTasksList()
     {
         return ArrayHelper::map(

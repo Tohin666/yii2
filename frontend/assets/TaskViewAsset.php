@@ -19,6 +19,7 @@ class TaskViewAsset extends AssetBundle
     public $depends = [
 //        JqueryAsset::class,
 //        'yii\web\JqueryAsset',
+        'yii\bootstrap\BootstrapAsset',
     ];
 
 }

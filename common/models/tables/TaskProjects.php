@@ -2,6 +2,7 @@
 
 namespace common\models\tables;
 
+use common\models\User;
 use Yii;
 
 /**
@@ -49,6 +50,11 @@ class TaskProjects extends \yii\db\ActiveRecord
      */
     public function getTasks()
     {
-        return $this->hasMany(Tasks::className(), ['project_id' => 'id']);
+        return $this->hasMany(Tasks::class, ['project_id' => 'id']);
+    }
+
+    public function getUsers($project_id)
+    {
+
     }
 }

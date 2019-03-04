@@ -5,3 +5,20 @@
     padding: 1px 15px;
     /*max-width: 350px*/
 }
+
+.taskWidget-hover:hover {
+    text-decoration: none;
+}
+
+.taskWidget-red {
+    background-color: red;
+    color: white;
+}
+
+.taskWidget-red:hover {
+    color: gold;
+}
+
+.taskWidget-grey {
+    background-color: lightgrey;
+}

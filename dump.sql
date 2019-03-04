@@ -232,7 +232,7 @@ CREATE TABLE `migration` (
 
 LOCK TABLES `migration` WRITE;
 /*!40000 ALTER TABLE `migration` DISABLE KEYS */;
-INSERT INTO `migration` VALUES ('m000000_000000_base',1549124065),('m130524_201442_init',1549124084),('m140506_102106_rbac_init',1550000608),('m170907_052038_rbac_add_index_on_auth_assignment_user_id',1550000608),('m180523_151638_rbac_updates_indexes_without_prefix',1550000608),('m190205_052429_create_tasks_table',1549348770),('m190205_054956_create_task_statuses_table',1549348771),('m190205_064518_create_comments_table',1549349699),('m190205_065623_create_task_attachments_table',1549349926),('m190209_103740_create_chat_table',1549709059),('m190209_155811_create_task_chat_table',1549728522),('m190216_073912_create_telegram_offset_table',1550302912),('m190216_112829_create_telegram_subscribe_table',1550316625),('m190216_120659_create_task_projects_table',1550319394),('m190219_071451_create_message_table',1550560863),('m190222_073828_add_access_token_column_to_user_table',1550821287);
+INSERT INTO `migration` VALUES ('m000000_000000_base',1549124065),('m130524_201442_init',1549124084),('m140506_102106_rbac_init',1550000608),('m170907_052038_rbac_add_index_on_auth_assignment_user_id',1550000608),('m180523_151638_rbac_updates_indexes_without_prefix',1550000608),('m190205_052429_create_tasks_table',1549348770),('m190205_054956_create_task_statuses_table',1549348771),('m190205_064518_create_comments_table',1549349699),('m190205_065623_create_task_attachments_table',1549349926),('m190209_103740_create_chat_table',1549709059),('m190209_155811_create_task_chat_table',1549728522),('m190216_073912_create_telegram_offset_table',1550302912),('m190216_112829_create_telegram_subscribe_table',1550316625),('m190216_120659_create_task_projects_table',1550319394),('m190219_071451_create_message_table',1550560863),('m190222_073828_add_access_token_column_to_user_table',1550821287),('m190301_051120_add_administrator_id_column_to_tasks_table',1551417636),('m190303_065834_create_task_project_users_table',1551596818);
 /*!40000 ALTER TABLE `migration` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -294,6 +294,33 @@ INSERT INTO `task_chat` VALUES (1,1,3,'1234'),(2,1,NULL,'4321'),(3,1,NULL,'55544
 UNLOCK TABLES;
 
 --
+-- Table structure for table `task_project_users`
+--
+
+DROP TABLE IF EXISTS `task_project_users`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `task_project_users` (
+  `project_id` int(11) DEFAULT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  KEY `fk_task_project` (`project_id`),
+  KEY `fk_task_project_user` (`user_id`),
+  CONSTRAINT `fk_task_project` FOREIGN KEY (`project_id`) REFERENCES `task_projects` (`id`),
+  CONSTRAINT `fk_task_project_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `task_project_users`
+--
+
+LOCK TABLES `task_project_users` WRITE;
+/*!40000 ALTER TABLE `task_project_users` DISABLE KEYS */;
+INSERT INTO `task_project_users` VALUES (1,1),(1,2),(1,3);
+/*!40000 ALTER TABLE `task_project_users` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `task_projects`
 --
 
@@ -304,7 +331,7 @@ CREATE TABLE `task_projects` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -313,7 +340,7 @@ CREATE TABLE `task_projects` (
 
 LOCK TABLES `task_projects` WRITE;
 /*!40000 ALTER TABLE `task_projects` DISABLE KEYS */;
-INSERT INTO `task_projects` VALUES (1,'New Project'),(2,'New Project 2'),(3,'New Project 3'),(5,'New Project 4'),(6,'New Project 5'),(7,'New Project 6'),(8,'New Project 7'),(9,'New Project 9'),(10,'New Project 10'),(11,'New Project 11'),(12,'New Project 12'),(13,'New Project 17'),(14,'New Project 18'),(16,'New Project 19'),(17,'New Project 20'),(18,'New Project 21'),(19,'TelegramProject');
+INSERT INTO `task_projects` VALUES (1,'New Project'),(2,'New Project 2'),(3,'New Project 3'),(5,'New Project 4'),(6,'New Project 5'),(7,'New Project 6'),(8,'New Project 7'),(9,'New Project 9'),(10,'New Project 10'),(11,'New Project 11'),(12,'New Project 12'),(13,'New Project 17'),(14,'New Project 18'),(16,'New Project 19'),(17,'New Project 20'),(18,'New Project 21'),(19,'TelegramProject'),(20,'Super New Project');
 /*!40000 ALTER TABLE `task_projects` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -358,14 +385,17 @@ CREATE TABLE `tasks` (
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   `project_id` int(11) DEFAULT NULL,
+  `administrator_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_tasks_users_responsible` (`responsible_id`),
   KEY `fk_task_statuses` (`status`),
   KEY `fk_tasks_projects` (`project_id`),
+  KEY `fk_tasks_user_administrator` (`administrator_id`),
   CONSTRAINT `fk_task_statuses` FOREIGN KEY (`status`) REFERENCES `task_statuses` (`id`),
   CONSTRAINT `fk_tasks_projects` FOREIGN KEY (`project_id`) REFERENCES `task_projects` (`id`),
+  CONSTRAINT `fk_tasks_user_administrator` FOREIGN KEY (`administrator_id`) REFERENCES `user` (`id`),
   CONSTRAINT `fk_tasks_users_responsible` FOREIGN KEY (`responsible_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -374,7 +404,7 @@ CREATE TABLE `tasks` (
 
 LOCK TABLES `tasks` WRITE;
 /*!40000 ALTER TABLE `tasks` DISABLE KEYS */;
-INSERT INTO `tasks` VALUES (1,'Новая задача','2019-02-07 00:00:00','Description666',1,2,'2019-02-06 11:17:35','2019-02-15 09:00:53',1),(2,'Еще одна задача','2019-02-10 12:00:00','sdfasdf asdfasdf3',3,1,'2019-02-06 11:19:13','2019-02-15 10:19:51',2),(3,'New','2019-02-08 00:00:00','Описание3',2,2,'2019-02-06 11:19:47','2019-02-15 11:06:23',3),(4,'Test Task 3835','2019-02-07 00:00:00','Test description',1,1,'2019-02-07 15:23:57','2019-02-07 15:23:57',5),(5,'Test Task 740','2019-02-07 00:00:00','Test description',1,1,'2019-02-07 15:27:01','2019-02-07 15:27:01',6),(6,'New222','2019-01-24 00:00:00','Description',1,1,'2019-02-07 15:28:13','2019-02-07 15:28:13',7),(7,'Test Task 3057','2019-02-07 00:00:00','Test description',1,1,'2019-02-07 15:30:00','2019-02-07 15:30:00',1),(9,'Test Task 8376','2019-02-07 00:00:00','Test description',1,1,'2019-02-07 15:37:26','2019-02-07 15:37:26',2),(10,'Test Task 1237','2019-02-07 00:00:00','Test description',1,1,'2019-02-07 15:39:33','2019-02-07 15:39:33',3),(11,'Test Task 6432','2019-02-07 00:00:00','Test description',1,1,'2019-02-07 15:50:59','2019-02-07 15:50:59',5),(12,'Test Task 6422','2019-02-07 00:00:00','Test description',1,1,'2019-02-07 15:52:19','2019-02-07 15:52:19',6),(13,'Суперновая задача','2019-02-14 14:30:00','фывафываыв ывафываыв',7,4,'2019-02-12 22:19:26','2019-02-12 22:28:20',7),(14,'New10','2019-02-18 09:05:00','fgasdg',1,1,'2019-02-17 09:08:41','2019-02-17 09:08:41',10),(16,'New12','2019-02-19 13:25:00','qqqqqqqqq',1,1,'2019-02-17 09:23:51','2019-02-17 09:23:51',12),(17,'TelegramTask','2019-02-18 15:43:46','No description',1,1,'2019-02-18 15:43:46','2019-02-18 15:43:46',19),(18,'REST задача','2019-02-10 12:00:00','rrrrrrrrrrr',3,2,'2019-02-20 10:19:48','2019-02-20 10:21:05',2);
+INSERT INTO `tasks` VALUES (1,'Новая задача','2019-03-04 00:00:00','Description666',1,2,'2019-02-06 11:17:35','2019-03-03 09:14:10',1,1),(2,'Еще одна задача','2019-02-10 12:00:00','sdfasdf asdfasdf3',3,1,'2019-02-06 11:19:13','2019-02-15 10:19:51',2,NULL),(3,'New','2019-02-08 00:00:00','Описание3',2,2,'2019-02-06 11:19:47','2019-02-15 11:06:23',3,NULL),(4,'Test Task 3835','2019-02-07 00:00:00','Test description',1,1,'2019-02-07 15:23:57','2019-02-07 15:23:57',5,NULL),(5,'Test Task 740','2019-02-07 00:00:00','Test description',1,1,'2019-02-07 15:27:01','2019-02-07 15:27:01',6,NULL),(6,'New222','2019-01-24 00:00:00','Description',1,1,'2019-02-07 15:28:13','2019-02-07 15:28:13',7,NULL),(7,'Test Task 3057','2019-02-07 00:00:00','Test description',1,3,'2019-02-07 15:30:00','2019-03-01 08:47:46',1,1),(9,'Test Task 8376','2019-02-07 00:00:00','Test description',1,1,'2019-02-07 15:37:26','2019-02-07 15:37:26',2,NULL),(10,'Test Task 1237','2019-02-07 00:00:00','Test description',1,1,'2019-02-07 15:39:33','2019-02-07 15:39:33',3,NULL),(11,'Test Task 6432','2019-02-07 00:00:00','Test description',1,1,'2019-02-07 15:50:59','2019-02-07 15:50:59',5,NULL),(12,'Test Task 6422','2019-02-07 00:00:00','Test description',1,3,'2019-02-07 15:52:19','2019-03-03 09:17:51',6,1),(13,'Суперновая задача','2019-02-14 14:30:00','фывафываыв ывафываыв',7,4,'2019-02-12 22:19:26','2019-02-12 22:28:20',7,NULL),(14,'New10','2019-02-18 09:05:00','fgasdg',1,1,'2019-02-17 09:08:41','2019-02-17 09:08:41',10,NULL),(16,'New12','2019-02-19 13:25:00','qqqqqqqqq',1,1,'2019-02-17 09:23:51','2019-02-17 09:23:51',12,NULL),(17,'TelegramTask','2019-02-18 15:43:46','No description',1,1,'2019-02-18 15:43:46','2019-02-18 15:43:46',19,NULL),(18,'REST задача','2019-02-10 12:00:00','rrrrrrrrrrr',3,2,'2019-02-20 10:19:48','2019-02-20 10:21:05',2,NULL),(19,'Super New Task','2019-03-03 08:40:00','this is Super New Task',7,1,'2019-03-01 08:41:50','2019-03-01 08:41:50',20,1);
 /*!40000 ALTER TABLE `tasks` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -471,4 +501,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-02-22 11:56:01
+-- Dump completed on 2019-03-04  7:50:10
