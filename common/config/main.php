@@ -13,7 +13,7 @@ return [
         ],
         'bot' => [
             'class' => \SonkoDmitry\Yii\TelegramBot\Component::class,
-            'apiToken' => '711757940:AAHFC2A1D9oN1z4Q9eWeuyqIvqO_2kF3aiM',
+            'apiToken' => '#',
         ],
         'cache' => [
             'class' => 'yii\caching\FileCache',
